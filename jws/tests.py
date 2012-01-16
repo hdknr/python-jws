@@ -4,6 +4,13 @@ import ecdsa
 import hashlib
 import Crypto.PublicKey.RSA as rsa
 
+import sys
+if sys.version_info < (2,7):
+    import p26
+    unittest.TestCase.assertIn= p26.assertIn
+    unittest.TestCase.assertRaises= p26.assertRaises
+    
+
 class TestJWS_helpers(unittest.TestCase):
     def test_default_algorithm_finding(self):
         names = [('ES256', jws.algos.ECDSA), ('ES384', jws.algos.ECDSA), ('ES512', jws.algos.ECDSA),
