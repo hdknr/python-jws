@@ -1,3 +1,4 @@
+import unittest
 class _AssertRaisesContext(object):
     """A context manager used to implement TestCase.assertRaises* methods."""
 
@@ -45,6 +46,5 @@ def assertRaises(self, excClass, callableObj=None, *args, **kwargs):
     with context:
         callableObj(*args, **kwargs)
 
-
-
-
+unittest.TestCase.assertIn= assertIn
+unittest.TestCase.assertRaises= assertRaises
