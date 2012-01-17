@@ -169,3 +169,4 @@ class TestJWS_rsa(unittest.TestCase):
         public = self.private.publickey()
         self.assertTrue(len(sig) > 0)
         self.assertTrue(jws.verify(header, self.payload, sig, public))
+        self.assertTrue(jws.verify(header, None, sig, public, signing_input=sinput))
