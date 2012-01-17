@@ -22,11 +22,11 @@ def sign(head, payload, key=None):
     if not data['signer']:
         raise MissingSigner("Header was processed, but no algorithm was found to sign the message")
     signer = data['signer']
-    signature = signer(_signing_input(head, payload), key)
-    return utils.to_base64(signature)
-    
+    sinput = _signing_input(head, payload)
+    signature = signer( sinput ,key )
+    return sinput,utils.to_base64(signature)    #: return Signing Input and Signature
 
-def verify(head, payload, encoded_signature, key=None):
+def verify(head, payload, encoded_signature, key=None,signing_input=None):
     data = {
         'key': key,
         'header': head,
@@ -41,7 +41,8 @@ def verify(head, payload, encoded_signature, key=None):
         raise MissingVerifier("Header was processed, but no algorithm was found to sign the message")
     verifier = data['verifier']
     signature = utils.from_base64(encoded_signature)
-    return verifier(_signing_input(head, payload), signature, key)
+    sinput = _signing_input(head, payload) if signing_input == None else signing_input
+    return verifier( sinput, signature, key)
     
 ####################
 # semi-private api #

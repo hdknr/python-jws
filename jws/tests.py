@@ -64,7 +64,7 @@ class TestJWS_helpers(unittest.TestCase):
         header = {'alg': 'F7U12'}
         payload = {'some': 'claim'}
         
-        sig = jws.sign(header, payload, 'wutlol')
+        sinput,sig = jws.sign(header, payload, 'wutlol')
         self.assertEqual(jws.verify(header,payload,sig, 'wutlol'), '<trollface>')
         self.assertRaises(jws.SignatureError, jws.verify, header, payload, sig, 'raaaaage')
         
@@ -83,27 +83,27 @@ class TestJWS_ecdsa(unittest.TestCase):
     def test_valid_ecdsa256(self):
         key = self.sk256
         header = {'alg': 'ES256'}
-        sig = jws.sign(header, self.payload, key)
+        sinput,sig = jws.sign(header, self.payload, key)
         self.assertTrue(len(sig) > 0)
         self.assertTrue(jws.verify(header, self.payload, sig, key.get_verifying_key()))
     
     def test_valid_ecdsa384(self):
         key = self.sk384
         header = {'alg': 'ES384'}
-        sig = jws.sign(header, self.payload, key)
+        sinput,sig = jws.sign(header, self.payload, key)
         self.assertTrue(len(sig) > 0)
         self.assertTrue(jws.verify(header, self.payload, sig, key.get_verifying_key()))
     
     def test_valid_ecdsa512(self):
         key = self.sk512
         header = {'alg': 'ES512'}
-        sig = jws.sign(header, self.payload, key)
+        sinput,sig = jws.sign(header, self.payload, key)
         self.assertTrue(len(sig) > 0)
         self.assertTrue(jws.verify(header, self.payload, sig, key.get_verifying_key()))
         
     def test_invalid_ecdsa_decode(self):
         header = {'alg': 'ES256'}
-        sig = jws.sign(header, self.payload, self.sk256)
+        sinput,sig = jws.sign(header, self.payload, self.sk256)
         vk = self.sk256.get_verifying_key()
         badkey = self.sk384.get_verifying_key()
         self.assertRaises(jws.SignatureError, jws.verify, header, self.payload, 'not a good sig', vk)
@@ -120,25 +120,25 @@ class TestJWS_hmac(unittest.TestCase):
     
     def test_valid_hmac256(self):
         header = {'alg': 'HS256'}
-        sig = jws.sign(header, self.payload, 'secret')
+        sinput,sig = jws.sign(header, self.payload, 'secret')
         self.assertTrue(len(sig) > 0)
         self.assertTrue(jws.verify(header, self.payload, sig, 'secret'))
     
     def test_valid_hmac384(self):
         header = {'alg': 'HS384'}
-        sig = jws.sign(header, self.payload, 'secret')
+        sinput,sig = jws.sign(header, self.payload, 'secret')
         self.assertTrue(len(sig) > 0)
         self.assertTrue(jws.verify(header, self.payload, sig, 'secret'))
     
     def test_valid_hmac512(self):
         header = {'alg': 'HS512'}
-        sig = jws.sign(header, self.payload, 'secret')
+        sinput,sig = jws.sign(header, self.payload, 'secret')
         self.assertTrue(len(sig) > 0)
         self.assertTrue(jws.verify(header, self.payload, sig, 'secret'))
 
     def test_invalid_hmac(self):
         header = {'alg': 'HS512'}
-        sig = jws.sign(header, self.payload, 'secret')
+        sinput,sig = jws.sign(header, self.payload, 'secret')
         self.assertRaises(jws.SignatureError(header, self.payload, sig, 'failwhale'))
 
 class TestJWS_rsa(unittest.TestCase):
@@ -151,21 +151,21 @@ class TestJWS_rsa(unittest.TestCase):
         
     def test_valid_rsa256(self):
         header = {'alg': 'RS256'}
-        sig = jws.sign(header, self.payload, self.private)
+        sinput,sig = jws.sign(header, self.payload, self.private)
         public = self.private.publickey()
         self.assertTrue(len(sig) > 0)
         self.assertTrue(jws.verify(header, self.payload, sig, public))
 
     def test_valid_rsa384(self):
         header = {'alg': 'RS384'}
-        sig = jws.sign(header, self.payload, self.private)
+        sinput,sig = jws.sign(header, self.payload, self.private)
         public = self.private.publickey()
         self.assertTrue(len(sig) > 0)
         self.assertTrue(jws.verify(header, self.payload, sig, public))
 
     def test_valid_rsa512(self):
         header = {'alg': 'RS512'}
-        sig = jws.sign(header, self.payload, self.private)
+        sinput,sig = jws.sign(header, self.payload, self.private)
         public = self.private.publickey()
         self.assertTrue(len(sig) > 0)
         self.assertTrue(jws.verify(header, self.payload, sig, public))
